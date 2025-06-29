@@ -1,19 +1,22 @@
 package com.dyvr.chatapp.model;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity
+@Getter
+@Setter
+@Entity(name = "users")
 public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String email;
 
     @Column(nullable = false)
