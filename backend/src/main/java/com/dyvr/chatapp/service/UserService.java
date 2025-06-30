@@ -5,6 +5,7 @@ import com.dyvr.chatapp.dto.SignUpRequest;
 import com.dyvr.chatapp.model.User;
 import com.dyvr.chatapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +13,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void registerUser(SignUpRequest userDetails){
 
@@ -27,7 +31,7 @@ public class UserService {
         user.setEmail(userDetails.getEmail());
         user.setUsername(userDetails.getUsername());
         user.setFirstName(userDetails.getFirstName());
-        user.setPassword(userDetails.getPassword());
+        user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
 
         userRepository.save(user);
 

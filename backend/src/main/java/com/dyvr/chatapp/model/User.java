@@ -1,12 +1,12 @@
 package com.dyvr.chatapp.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 @Entity(name = "users")
+@Data
 public class User{
 
     @Id
