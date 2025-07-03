@@ -42,7 +42,6 @@ public class UserService {
         if(user == null || !(user.getPassword().equals(loginDetails.getPassword()))){
             throw new IllegalArgumentException("Invalid credentials");
         }
-
         return user;
 
 
