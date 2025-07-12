@@ -30,7 +30,7 @@ public class UserService {
         User user = new User();
         user.setEmail(userDetails.getEmail());
         user.setUsername(userDetails.getUsername());
-        user.setFirstName(userDetails.getFirstName());
+        user.setFirstname(userDetails.getFirstname());
         user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
 
         userRepository.save(user);
