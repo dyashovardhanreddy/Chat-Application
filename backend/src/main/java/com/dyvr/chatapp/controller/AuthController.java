@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController()
 @RequestMapping("/chat-app/auth")
 public class AuthController {
@@ -46,7 +49,9 @@ public class AuthController {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDetails.getUsername(), loginDetails.getPassword()));
             String jwtToken = jwtUtil.generateToken(loginDetails.getUsername());
-            return ResponseEntity.status(HttpStatus.OK).body("JWT Token:" + jwtToken);
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("token", jwtToken);
+            return new ResponseEntity<Object>(map, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

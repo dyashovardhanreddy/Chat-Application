@@ -23,6 +23,6 @@ public class ChatController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).orElse(null);
-        return ResponseEntity.status(HttpStatus.OK).body("Welcome " + user.getFirstName());
+        return ResponseEntity.status(HttpStatus.OK).body("Welcome " + user.getFirstname());
     }
 }

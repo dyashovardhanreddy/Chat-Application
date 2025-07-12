@@ -24,5 +24,5 @@ public class SignUpRequest {
     private String email;
 
     @NotBlank(message = "Firstname is required")
-    private String firstName;
+    private String firstname;
 }
