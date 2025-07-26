@@ -1,12 +1,18 @@
 package com.dyvr.chatapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "users")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude = {"friends"})
+@EqualsAndHashCode(exclude = {"friends"})
 public class User{
 
     @Id
@@ -24,4 +30,13 @@ public class User{
 
     @Column(name = "first_name", nullable = false)
     private String firstname;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "user_friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    private Set<User> friends = new HashSet<>();
 }

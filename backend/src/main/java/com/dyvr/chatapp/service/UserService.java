@@ -43,7 +43,5 @@ public class UserService {
             throw new IllegalArgumentException("Invalid credentials");
         }
         return user;
-
-
     }
 }
