@@ -1,6 +1,6 @@
 package com.dyvr.chatapp.controller;
 
-import com.dyvr.chatapp.dto.SendFriendRequestDto;
+import com.dyvr.chatapp.dto.UserDto;
 import com.dyvr.chatapp.model.FriendRequest;
 import com.dyvr.chatapp.model.User;
 import com.dyvr.chatapp.repository.FriendRequestRepository;
@@ -30,12 +30,12 @@ public class FriendController {
     private FriendRequestRepository friendRequestRepository;
 
     @PostMapping("/sendFriendRequest")
-    public ResponseEntity<?> sendFriendRequest(@RequestBody SendFriendRequestDto friendRequestDto){
+    public ResponseEntity<?> sendFriendRequest(@RequestBody UserDto userDto){
 
         String senderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         User sender = userRepository.findByUsername(senderUsername).orElse(null);
 
-        User receiver = userRepository.findByUsername(friendRequestDto.getReceiverUsername()).orElse(null);
+        User receiver = userRepository.findByUsername(userDto.getUser()).orElse(null);
 
         if(sender == null || receiver == null || sender == receiver){
             return ResponseEntity.badRequest().body("Invalid Users");
