@@ -7,6 +7,7 @@ import com.dyvr.chatapp.model.User;
 import com.dyvr.chatapp.repository.UserRepository;
 import com.dyvr.chatapp.service.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -49,7 +50,9 @@ public class MessageController {
     }
 
     @GetMapping("/getMessages")
-    public ResponseEntity<?> getMessages(@RequestBody UserDto userDto){
+    public ResponseEntity<?> getMessages(@RequestBody UserDto userDto,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -61,7 +64,7 @@ public class MessageController {
             return ResponseEntity.badRequest().body("You are not friend with User");
         }
 
-        List<ChatMessage> messages = chatMessageService.getMessages(user1, user2);
+        Page<ChatMessage> messages = chatMessageService.getMessages(user1, user2, page, size);
 
         return ResponseEntity.status(HttpStatus.OK).body(messages);
     }
