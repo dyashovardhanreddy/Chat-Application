@@ -27,7 +27,7 @@ export const RegisterPage: React.FC = () => {
 
 
     const onSubmit = (values: RegistrationForm)  => {
-        axios.post('http://localhost:8080/chat-app/auth/register', {
+        axios.post('http://localhost:16120/chat-app/auth/register', {
             "username": values.username,
             "password": values.password,
             "confirmPassword": values.confirmPassword,
