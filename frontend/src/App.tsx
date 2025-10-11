@@ -5,16 +5,21 @@ import { UnauthenticatedLayout } from './layouts/UnauthenticationLayout';
 import './App.css'
 import { LoginPage } from './pages/LoginPages';
 import { RegisterPage } from './pages/RegisterPage';
+import { FriendsPage } from './pages/FriendsPage';
+import { LogoutPage } from './pages/LogoutPage';
+import { useAuth } from './context/AuthContext';
 
 function App() {
   
-  const isAuthenticated = !!localStorage.getItem('jwtToken');
+  const { isAuthenticated } = useAuth();
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       isAuthenticated? (
       <Route path='/chat-app/' element={<AuthenticatedLayout />}>
         <Route index element={<Home />} />
+        <Route path='friends' element={<FriendsPage />} />
+        <Route path='logout' element={<LogoutPage />} />
       </Route>
       ) : (
         <Route path='/chat-app/auth/' element={<UnauthenticatedLayout />}>

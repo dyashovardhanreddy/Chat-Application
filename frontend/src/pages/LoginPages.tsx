@@ -4,10 +4,13 @@ import YupPassword from 'yup-password';
 import type { LoginForm } from '../types/index'
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export const LoginPage: React.FC = () => {
          
     const navigate = useNavigate();
+
+    const { login } = useAuth();
 
     YupPassword(Yup);
 
@@ -22,13 +25,13 @@ export const LoginPage: React.FC = () => {
     })
 
 
-    const onSubmit = (values: LoginForm)  => {
-        axios.post('http://localhost:8080/chat-app/auth/login', {
+    const onSubmit = async (values: LoginForm)  => {
+        await axios.post('http://localhost:16120/chat-app/auth/login', {
             "username": values.usernameOrEmail,
             "password": values.password
         })
         .then(response => {
-            localStorage.setItem('jwtToken', response.data.token);
+            login(response.data.token);
             navigate("/chat-app/");
         }).catch(error => {
             console.log(error);
