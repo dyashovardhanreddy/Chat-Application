@@ -1,4 +1,4 @@
-import type { Friend } from "../types";
+import type { User } from "../types";
 
 import { getFriends } from "../services/friends";
 import { useEffect, useState } from "react";
@@ -6,7 +6,7 @@ import styled from "styled-components";
 import defaultPicture from "../assets/default-display-picture.jpg";
 
 export const FriendsPage : React.FC = () => {
-    const [friends, setFriends] = useState<Friend[]>([]);
+    const [friends, setFriends] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 

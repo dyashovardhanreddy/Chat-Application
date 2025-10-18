@@ -11,6 +11,7 @@ export const Navbar: React.FC = () => {
         <>
           <NavItem to="/chat-app">Home</NavItem>
           <NavItem to="/chat-app/friends">Friends</NavItem>
+          <NavItem to="/chat-app/findFriends">Find Friends</NavItem>
           <NavItem to="/chat-app/logout">Logout</NavItem>
         </>
       ) : (

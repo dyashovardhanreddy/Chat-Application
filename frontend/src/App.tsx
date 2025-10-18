@@ -8,6 +8,8 @@ import { RegisterPage } from './pages/RegisterPage';
 import { FriendsPage } from './pages/FriendsPage';
 import { LogoutPage } from './pages/LogoutPage';
 import { useAuth } from './context/AuthContext';
+import { FindFriendsPage } from './pages/FindFriendsPage';
+import { FriendRequestsPage } from './pages/FriendRequestsPage';
 
 function App() {
   
@@ -19,6 +21,8 @@ function App() {
       <Route path='/chat-app/' element={<AuthenticatedLayout />}>
         <Route index element={<Home />} />
         <Route path='friends' element={<FriendsPage />} />
+        <Route path='findFriends' element={<FindFriendsPage />} />
+        <Route path='friendRequests' element={<FriendRequestsPage />} />
         <Route path='logout' element={<LogoutPage />} />
       </Route>
       ) : (
