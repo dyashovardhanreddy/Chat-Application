@@ -1,3 +1,4 @@
 export * from './Register';
 export * from './Login';
-export * from './Friend';
+export * from './User';
+export * from './FriendRequest';

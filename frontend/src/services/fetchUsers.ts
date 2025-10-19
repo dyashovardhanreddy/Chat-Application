@@ -1,9 +1,10 @@
 import type { User } from "../types";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:16120/chat-app";
+const BASE_API_URL = "http://localhost:16120/chat-app";
 
-export const getFriends = async (): Promise<User[]> => {
+export const fetchUsers = async () : Promise<User[]> => {
+
     try {
         const token = localStorage.getItem("jwtToken");
 
@@ -11,7 +12,7 @@ export const getFriends = async (): Promise<User[]> => {
             throw new Error("User not authenticated. JWT token not found.");
         }
 
-        const response = await axios.get(`${API_BASE_URL}/getFriends`, {
+        const response = await axios.get(`${BASE_API_URL}/findFriends`,{
             headers: {
                 Authorization: `Bearer ${token}`,
             }
@@ -19,7 +20,8 @@ export const getFriends = async (): Promise<User[]> => {
 
         return response.data as User[];
     } catch(error: any){
-        console.error("Error fetching friends:", error);
+        console.error("Error fetching users:", error);
         throw error;
     }
-};
+
+}

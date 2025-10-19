@@ -1,5 +1,6 @@
 package com.dyvr.chatapp.controller;
 
+import com.dyvr.chatapp.dto.FriendRequestDTO;
 import com.dyvr.chatapp.dto.UserDto;
 import com.dyvr.chatapp.model.FriendRequest;
 import com.dyvr.chatapp.model.User;
@@ -13,8 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/chat-app")
@@ -85,6 +88,25 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK).body("Friend Request Accepted");
     }
 
+    @PostMapping("/rejectFriendRequest/{friendRequestId}")
+    public ResponseEntity<?> rejectFriendRequest(@PathVariable long friendRequestId){
+
+        FriendRequest friendRequest = friendRequestRepository.getReferenceById(friendRequestId);
+
+        if(friendRequest == null){
+            return ResponseEntity.badRequest().body("Invalid Request, friend request does not exist");
+        }
+
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(!friendRequest.getReceiver().getUsername().equals(user)){
+            return ResponseEntity.badRequest().body("Invalid Request, user can't perform action on this request");
+        }
+
+        friendRequestRepository.deleteById(friendRequestId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Friend Request Rejected");
+    }
 
     @GetMapping("/getFriendRequests")
     public ResponseEntity<?> getFriendRequests(){
@@ -92,7 +114,8 @@ public class FriendController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).orElse(null);
-        List<FriendRequest> friendRequests = friendRequestService.getFriendRequests(user);
+        List<FriendRequestDTO> friendRequests = friendRequestService.getFriendRequests(user).stream()
+                .map(friendRequest -> new FriendRequestDTO(friendRequest.getId(), friendRequest.getSender().getFirstname())).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(friendRequests);
     }
@@ -106,5 +129,33 @@ public class FriendController {
         List<User> users = user.getFriends().stream().toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+
+    @GetMapping("/findFriends")
+    public ResponseEntity<?> findFriends(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username).orElse(null);
+        Set<User> friends = user.getFriends();
+        if(friends == null)
+            friends = new HashSet<>();
+        Set<User> users = new HashSet<>(userRepository.findAll());
+
+        // Remove users who are already friends
+
+        for(User friend: friends){
+            users.remove(friend);
+        }
+        users.remove(user);
+
+        // Remove users from whom friend requests already exists
+        List<FriendRequest> friendRequests = friendRequestService.getFriendRequests(user);
+        for(FriendRequest friendRequest: friendRequests){
+            users.remove(friendRequest.getSender());
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(users.stream().toList());
     }
 }
